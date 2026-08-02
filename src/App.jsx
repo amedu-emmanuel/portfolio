@@ -362,7 +362,7 @@ export default function App() {
             </div>
             <div className="contact-card">
               <span>Reach out directly</span>
-              <a className="contact-email" href="mailto:emmanuelamedu5@gmail.com">emmanuelamedu5@gmail.com</a>
+              <a className="contact-email" href="mailto:me@emmanuelamedu.com">me@emmanuelamedu.com</a>
               <div className="contact-meta">
                 <a href="tel:+2347068795337">+234 706 879 5337</a>
               </div>
