@@ -124,6 +124,7 @@ const partners = [
 ];
 
 const heroHeading = 'Building secure, scalable platforms that power modern digital experiences.';
+const GA_MEASUREMENT_ID = 'G-GMBGLP80PB';
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -163,15 +164,59 @@ export default function App() {
     return () => window.clearTimeout(typingTimer);
   }, []);
 
+  useEffect(() => {
+    const trackPageView = () => {
+      if (typeof window.gtag !== 'function') {
+        return;
+      }
+
+      const pagePath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+      if (window.__lastTrackedGaPagePath === pagePath) {
+        return;
+      }
+
+      window.gtag('event', 'page_view', {
+        page_title: document.title,
+        page_location: window.location.href,
+        page_path: pagePath,
+        send_to: GA_MEASUREMENT_ID
+      });
+      window.__lastTrackedGaPagePath = pagePath;
+    };
+
+    trackPageView();
+    window.addEventListener('hashchange', trackPageView);
+    window.addEventListener('popstate', trackPageView);
+
+    return () => {
+      window.removeEventListener('hashchange', trackPageView);
+      window.removeEventListener('popstate', trackPageView);
+    };
+  }, []);
+
+  useEffect(() => {
+    const closeMenuOnEscape = (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', closeMenuOnEscape);
+    return () => window.removeEventListener('keydown', closeMenuOnEscape);
+  }, []);
+
   return (
     <>
       <header className="site-header">
         <div className="container nav-wrap">
-          <a className="brand" href="#home">Emmanuel Amedu</a>
-          <button className="nav-toggle" aria-label="Toggle navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
+          <a className="brand" href="#home">
+            <img className="brand-mark" src="/images/header-logo.png" alt="" />
+            Emmanuel Amedu
+          </a>
+          <button type="button" className="nav-toggle" aria-label="Toggle navigation" aria-controls="primary-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
             <span></span><span></span><span></span>
           </button>
-          <nav className={`site-nav ${menuOpen ? 'open' : ''}`} aria-label="Primary navigation">
+          <nav id="primary-navigation" className={`site-nav ${menuOpen ? 'open' : ''}`} aria-label="Primary navigation">
             <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
             {/* <a href="#experience" onClick={() => setMenuOpen(false)}>Experience</a> */}
             <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
@@ -197,7 +242,7 @@ export default function App() {
               </p>
               <div className="hero-actions">
                 <a className="btn btn-primary" href="#projects">View Projects</a>
-                <a className="btn btn-secondary" href="#contact">Let’s Connect</a>
+                <a className="btn btn-secondary" href="#contact">Discuss an Opportunity</a>
               </div>
               <div className="metric-row">
                 <div className="metric-card"><strong>7+</strong><span>Years Experience</span></div>
@@ -210,7 +255,7 @@ export default function App() {
 
         <section className="partners-strip">
           <div className="container">
-            <p className="eyebrow">Professional Experience Across</p>
+            <p className="eyebrow">Professional experience with</p>
             <div className="partner-row">
               {partners.map((partner) => (
                 <div className="partner-pill" key={partner.name}>
@@ -229,7 +274,7 @@ export default function App() {
           <div className="container section-grid">
             <div>
               <p className="eyebrow">About</p>
-              <h2>Architecture-led engineering with a product mindset and a reliability-first approach.</h2>
+              <h2>Architecture-led engineering with a product mindset and a reliability-first approach</h2>
             </div>
             <div className="about-copy">
               <p>
@@ -313,7 +358,7 @@ export default function App() {
                 <article className="project-card" key={project.title}>
                   <div className="project-header">
                     <h3>{project.title}</h3>
-                    {project.link ? <a href={project.link} target="_blank" rel="noreferrer">Visit site</a> : null}
+                    {project.link ? <a href={project.link} target="_blank" rel="noreferrer" aria-label={`Visit ${project.title}`}>Visit site</a> : null}
                   </div>
                   <p>{project.description}</p>
                   <div className="tag-list">
@@ -357,8 +402,8 @@ export default function App() {
                 </svg>
               </div>
               <p className="eyebrow">Contact</p>
-              <h2>Let’s build the next reliable platform.</h2>
-              <p>Open to opportunities in backend engineering, platform engineering, solution architecture, and software leadership.</p>
+              <h2>Let’s discuss your next reliable platform.</h2>
+              <p>Open to solutions architecture, software engineering, cloud architecture, platform engineering, and technical leadership opportunities.</p>
             </div>
             <div className="contact-card">
               <span>Reach out directly</span>
