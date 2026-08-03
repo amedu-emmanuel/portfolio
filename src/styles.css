@@ -113,7 +113,7 @@ a { color: inherit; text-decoration: none; }
   padding: 3rem 0 4rem;
   background:
     linear-gradient(90deg, rgba(7, 17, 31, 0.78) 0%, rgba(7, 17, 31, 0.56) 45%, rgba(7, 17, 31, 0.18) 100%),
-    url('/profile.jpg') right center/contain no-repeat;
+    url('/images/profile.jpg') right center/contain no-repeat;
   background-attachment: fixed;
   overflow: hidden;
 }
